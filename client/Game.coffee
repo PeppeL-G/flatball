@@ -2,16 +2,19 @@ class @Game
 	
 	# time: 0
 	# pitch: Pitch
+	# ball: Ball
 	
 	constructor: () ->
 		
 		# Game settings.
 		pitchWidth = 100
 		pitchHeight = 150
+		ballRadius = 3
 		
 		# Initialize the game.
 		@time = 0
 		@pitch = new Pitch(pitchWidth, pitchHeight)
+		@ball = new Ball(pitchWidth/2, pitchHeight/2, ballRadius)
 	
 	tick: () ->
 		@time++
@@ -38,3 +41,4 @@ class @Game
 		context.translate(-@pitch.getWidth()/2, -@pitch.getHeight()/2)
 		
 		@pitch.draw(context, scale)
+		@ball.draw(context, scale)
