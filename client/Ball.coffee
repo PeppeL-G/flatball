@@ -16,6 +16,9 @@ class @Ball
 	getY: () ->
 		return @y
 	
+	getRadius: () ->
+		return @radius
+	
 	getLeft: () ->
 		return @x-@radius
 	

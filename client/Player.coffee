@@ -20,6 +20,11 @@ class @Player
 	getBottom: () ->
 		return @y+@radius
 	
+	overlapsWith: (circle) ->
+		dx = circle.getX() - @x
+		dy = circle.getY() - @y
+		return Math.sqrt(dx*dx + dy*dy) < circle.getRadius() + @radius
+	
 	tick: (ball) ->
 		
 		# Move the player towards the ball.

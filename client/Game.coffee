@@ -30,21 +30,29 @@ class @Game
 		
 		@time++
 		
-		# Make everything tick.
-		@ball.tick()
+		playerHavingBall = null
 		for player in @playersInTeam1
-			player.tick(@ball)
+			if player.overlapsWith(@ball)
+				playerHavingBall = player
+				break
 		
-		# Handle collisions.
-		if @pitch.collidesWithLeftWall(@ball)
-			@ball.flipXSpeedDirection()
-		else if @pitch.collidesWithRightWall(@ball)
-			@ball.flipXSpeedDirection()
-		
-		if @pitch.collidesWithTopWall(@ball)
-			@ball.flipYSpeedDirection()
-		else if @pitch.collidesWithBottomWall(@ball)
-			@ball.flipYSpeedDirection()
+		if playerHavingBall == null
+			
+			# Make everything tick.
+			@ball.tick()
+			for player in @playersInTeam1
+				player.tick(@ball)
+			
+			# Handle collisions.
+			if @pitch.collidesWithLeftWall(@ball)
+				@ball.flipXSpeedDirection()
+			else if @pitch.collidesWithRightWall(@ball)
+				@ball.flipXSpeedDirection()
+			
+			if @pitch.collidesWithTopWall(@ball)
+				@ball.flipYSpeedDirection()
+			else if @pitch.collidesWithBottomWall(@ball)
+				@ball.flipYSpeedDirection()
 	
 	draw: (context, width, height) ->
 		

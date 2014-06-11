@@ -1,7 +1,7 @@
 Meteor.startup ->
 	
 	# Settings.
-	ticksPerSecond = 10
+	ticksPerSecond = 60
 	
 	# The model.
 	game = new Game()
