@@ -12,40 +12,40 @@ class @Pitch
 	getHeight: () ->
 		return @height
 	
-	draw: (context, offsetX, offsetY, scale) ->
+	draw: (context, scale) ->
 		
 		# Draw the grass.
 		context.fillStyle = 'green'
-		x0 = offsetX + 0
-		y0 = offsetY + 0
-		width = @width*scale
-		height = @height*scale
+		x0 = 0
+		y0 = 0
+		width = @width
+		height = @height
 		context.fillRect(x0, y0, width, height)
 		
 		# Draw the lines.
-		lineRadius = 0.5
-		context.lineWidth = lineRadius*scale*2
+		lineRadius = 0.1*scale
+		context.lineWidth = lineRadius*2
 		context.strokeStyle = 'white'
 		
 		# (the side lines)
 		context.beginPath()
-		context.moveTo(offsetX, offsetY+lineRadius*scale)
-		context.lineTo(offsetX+@width*scale-lineRadius*scale, offsetY+lineRadius*scale)
-		context.lineTo(offsetX+@width*scale-lineRadius*scale, offsetY+@height*scale-lineRadius*scale)
-		context.lineTo(offsetX+lineRadius*scale, offsetY+@height*scale-lineRadius*scale)
-		context.lineTo(offsetX+lineRadius*scale, offsetY+lineRadius*scale)
+		context.moveTo(0, lineRadius)
+		context.lineTo(@width-lineRadius, lineRadius)
+		context.lineTo(@width-lineRadius, @height-lineRadius)
+		context.lineTo(lineRadius, @height-lineRadius)
+		context.lineTo(lineRadius, lineRadius)
 		context.stroke()
 		
 		# (middle line)
 		context.beginPath()
-		context.moveTo(offsetX,              offsetY+@height/2*scale)
-		context.lineTo(offsetX+@width*scale, offsetY+@height/2*scale)
+		context.moveTo(0,            @height/2)
+		context.lineTo(@width, @height/2)
 		context.stroke()
 		
 		# (circle in middle)
-		x = offsetX+@width/2*scale
-		y = offsetY+@height/2*scale
-		radius = @width/7*scale
+		x = @width/2
+		y = @height/2
+		radius = @width/7
 		context.beginPath()
 		context.arc(x, y, radius, 0, 2*Math.PI)
 		context.stroke()
