@@ -1,20 +1,12 @@
-class @Ball
+class @Player
 	
 	# x: 0
 	# y: 0
 	# radius: 0
-	# speedX: 0
-	# speedY: 0
+	# speed: 0
 	
-	constructor: (@x, @y, @radius) ->
-		@speedX = 1.6
-		@speedY = 1
-	
-	getX: () ->
-		return @x
-	
-	getY: () ->
-		return @y
+	constructor: (@x, @y, @radius, @speed) ->
+		
 	
 	getLeft: () ->
 		return @x-@radius
@@ -28,20 +20,19 @@ class @Ball
 	getBottom: () ->
 		return @y+@radius
 	
-	flipXSpeedDirection: () ->
-		@speedX *= -1
-	
-	flipYSpeedDirection: () ->
-		@speedY *= -1
-	
-	tick: () ->
-		@x += @speedX
-		@y += @speedY
+	tick: (ball) ->
+		
+		# Move the player towards the ball.
+		dx = ball.getX() - @x
+		dy = ball.getY() - @y
+		distance = Math.sqrt(dx*dx + dy*dy)
+		@x += dx/distance*@speed
+		@y += dy/distance*@speed
 	
 	draw: (context, scale) ->
 		
 		# Draw it as a circle.
-		context.fillStyle = 'yellow'
+		context.fillStyle = 'blue'
 		context.beginPath()
 		context.arc(@x, @y, @radius, 0, 2*Math.PI)
 		context.fill()
