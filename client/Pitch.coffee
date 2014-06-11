@@ -12,6 +12,18 @@ class @Pitch
 	getHeight: () ->
 		return @height
 	
+	collidesWithLeftWall: (circle) ->
+		return circle.getLeft() < 0
+	
+	collidesWithRightWall: (circle) ->
+		return @width < circle.getRight()
+	
+	collidesWithTopWall: (circle) ->
+		return circle.getTop() < 0
+	
+	collidesWithBottomWall: (circle) ->
+		return @height < circle.getBottom()
+	
 	draw: (context, scale) ->
 		
 		# Draw the grass.

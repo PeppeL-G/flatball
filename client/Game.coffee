@@ -9,7 +9,7 @@ class @Game
 		# Game settings.
 		pitchWidth = 100
 		pitchHeight = 150
-		ballRadius = 3
+		ballRadius = 2
 		
 		# Initialize the game.
 		@time = 0
@@ -17,8 +17,22 @@ class @Game
 		@ball = new Ball(pitchWidth/2, pitchHeight/2, ballRadius)
 	
 	tick: () ->
+		
 		@time++
+		
+		# Make everything tick.
 		@ball.tick()
+		
+		# Handle collisions.
+		if @pitch.collidesWithLeftWall(@ball)
+			@ball.flipXSpeedDirection()
+		else if @pitch.collidesWithRightWall(@ball)
+			@ball.flipXSpeedDirection()
+		
+		if @pitch.collidesWithTopWall(@ball)
+			@ball.flipYSpeedDirection()
+		else if @pitch.collidesWithBottomWall(@ball)
+			@ball.flipYSpeedDirection()
 	
 	draw: (context, width, height) ->
 		
