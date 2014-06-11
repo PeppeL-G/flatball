@@ -18,6 +18,7 @@ class @Game
 	
 	tick: () ->
 		@time++
+		@ball.tick()
 	
 	draw: (context, width, height) ->
 		
