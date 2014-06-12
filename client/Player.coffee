@@ -6,8 +6,8 @@ class @Player
 	# speed: 0
 	# energy: 0
 	
-	constructor: (@x, @y, @radius, @speed, @energy) ->
-		
+	constructor: (@x, @y, @radius, @speed, @resilience) ->
+		@energy = 0
 	
 	getX: () ->
 		return @x
@@ -43,6 +43,16 @@ class @Player
 		distance = Math.sqrt(dx*dx + dy*dy)
 		@x += dx/distance*@speed
 		@y += dy/distance*@speed
+		
+		@energy += @resilience
+	
+	moveBack: (ball) ->
+		dx = ball.getX() - @x
+		dy = ball.getY() - @y
+		distance = Math.sqrt(dx*dx + dy*dy)
+		@x -= dx/distance*@speed
+		@y -= dy/distance*@speed
+	
 	
 	shoot: () ->
 		@energy = 0

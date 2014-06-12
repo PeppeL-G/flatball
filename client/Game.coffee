@@ -14,17 +14,26 @@ class @Game
 		ballRadius = 1.5
 		playerRadius = 2
 		team1StartPositions = [
-			x: 25
-			y: 25
+			x: pitchWidth*0.5
+			y: pitchHeight*0.95
 		,
-			x: 75
-			y: 75
+			x: pitchWidth*0.25
+			y: pitchHeight*0.75
+		,
+			x: pitchWidth*0.75
+			y: pitchHeight*0.75
+		,
+			x: pitchWidth*0.25
+			y: pitchHeight*0.25
+		,
+			x: pitchWidth*0.75
+			y: pitchHeight*0.25
 		]
 		
 		# Initialize the game.
 		@time = 0
 		@pitch = new Pitch(pitchWidth, pitchHeight)
-		@ball = new Ball(pitchWidth/2, pitchHeight/2, ballRadius)
+		@ball = new Ball(pitchWidth*0.5, pitchHeight*0.9, ballRadius)
 		@playersInTeam1 = (new Player(player.x, player.y, playerRadius, 0.5, 5) for player in team1StartPositions)
 	
 	tick: () ->
@@ -42,7 +51,14 @@ class @Game
 			# Make everything tick.
 			@ball.tick()
 			for player in @playersInTeam1
+				
 				player.tick(@ball)
+				
+				# If the player collides with another player, move him back.
+				for otherPlayer in @playersInTeam1
+					if player != otherPlayer and player.overlapsWith(otherPlayer)
+						player.moveBack(@ball)
+						break
 			
 			# Handle collisions.
 			if @pitch.collidesWithLeftWall(@ball)
