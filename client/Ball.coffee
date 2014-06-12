@@ -7,8 +7,9 @@ class @Ball
 	# speedY: 0
 	
 	constructor: (@x, @y, @radius) ->
-		@speedX = 1.6
-		@speedY = 0.3
+		@speedX = 0
+		@speedY = 0
+		@friction = 0.95
 	
 	getX: () ->
 		return @x
@@ -48,6 +49,8 @@ class @Ball
 	tick: () ->
 		@x += @speedX
 		@y += @speedY
+		@speedX *= @friction
+		@speedY *= @friction
 	
 	draw: (context, scale) ->
 		
