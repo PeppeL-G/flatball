@@ -8,7 +8,7 @@ class @Ball
 	
 	constructor: (@x, @y, @radius) ->
 		@speedX = 1.6
-		@speedY = 1
+		@speedY = 0.3
 	
 	getX: () ->
 		return @x
@@ -30,6 +30,10 @@ class @Ball
 	
 	getBottom: () ->
 		return @y+@radius
+	
+	setPosition: (x, y) ->
+		@x = x
+		@y = y
 	
 	flipXSpeedDirection: () ->
 		@speedX *= -1

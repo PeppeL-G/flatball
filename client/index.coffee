@@ -1,10 +1,11 @@
 Meteor.startup ->
 	
 	# Settings.
-	ticksPerSecond = 60
+	ticksPerSecond = 20
 	
 	# The model.
-	game = new Game()
+	finger = new Finger()
+	game = new Game(finger)
 	
 	# The view.
 	canvas = document.getElementById('canvas')
@@ -14,9 +15,21 @@ Meteor.startup ->
 	canvas.setAttribute('height', height)
 	
 	# The controller.
-	context = canvas.getContext('2d')
+	mouseX = 0
+	mouseY = 0
+	isMouseButtonPressed = false
 	
+	mouseMoveHandler = (event) ->
+		mouseX = event.x
+		mouseY = event.y
+		isMouseButtonPressed = (event.which == 1)
+	canvas.addEventListener('mousemove', mouseMoveHandler)
+	
+	context = canvas.getContext('2d')
 	tick = () ->
+		finger.setX(mouseX)
+		finger.setY(mouseY)
+		finger.setPressingStatus(isMouseButtonPressed)
 		game.tick()
 		game.draw(context, width, height)
 	

@@ -1,11 +1,12 @@
 class @Game
 	
+	# finger Finger
 	# time: 0
 	# pitch: Pitch
 	# ball: Ball
 	# playersInTeam1: [Player]
 	
-	constructor: () ->
+	constructor: (@finger) ->
 		
 		# Game settings.
 		pitchWidth = 100
@@ -53,6 +54,28 @@ class @Game
 				@ball.flipYSpeedDirection()
 			else if @pitch.collidesWithBottomWall(@ball)
 				@ball.flipYSpeedDirection()
+		
+		else
+			
+			# A player has the ball.
+			x = @finger.getX()
+			y = @finger.getY()
+			
+			if @pitchX0 <= x and x <= @pitchX1 and @pitchY0 <= y and y <= @pitchY1
+				
+				if @finger.isPressing()
+					
+					# Change the x and y to coordinates on the pitch.
+					x = (x-@pitchX0)*@pitch.getWidth()/(@pitchX1-@pitchX0)
+					y = (y-@pitchY0)*@pitch.getHeight()/(@pitchY1-@pitchY0)
+					
+					# Move the ball according to the fingers position.
+					angle = Math.atan2(playerHavingBall.getY()-y, playerHavingBall.getX()-x)
+					
+					# (multiply by 0.95 so they surely overlap)
+					newBallX = playerHavingBall.getX() + Math.cos(angle)*(@ball.getRadius()+playerHavingBall.getRadius())*0.95
+					newBallY = playerHavingBall.getY() + Math.sin(angle)*(@ball.getRadius()+playerHavingBall.getRadius())*0.95
+					@ball.setPosition(newBallX, newBallY)
 	
 	draw: (context, width, height) ->
 		
@@ -74,6 +97,11 @@ class @Game
 		context.translate(width/2, height/2)
 		context.scale(scale, scale)
 		context.translate(-@pitch.getWidth()/2, -@pitch.getHeight()/2)
+		
+		@pitchX0 = width/2 - @pitch.getWidth()/2*scale
+		@pitchX1 = width/2 + @pitch.getWidth()/2*scale
+		@pitchY0 = height/2 - @pitch.getHeight()/2*scale
+		@pitchY1 = height/2 + @pitch.getHeight()/2*scale
 		
 		@pitch.draw(context, scale)
 		@ball.draw(context, scale)

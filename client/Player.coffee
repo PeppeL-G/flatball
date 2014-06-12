@@ -8,6 +8,15 @@ class @Player
 	constructor: (@x, @y, @radius, @speed) ->
 		
 	
+	getX: () ->
+		return @x
+	
+	getY: () ->
+		return @y
+	
+	getRadius: () ->
+		return @radius
+	
 	getLeft: () ->
 		return @x-@radius
 	
