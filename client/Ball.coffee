@@ -35,6 +35,10 @@ class @Ball
 		@x = x
 		@y = y
 	
+	setSpeed: (x, y) ->
+		@speedX = x
+		@speedY = y
+	
 	flipXSpeedDirection: () ->
 		@speedX *= -1
 	

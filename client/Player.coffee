@@ -4,8 +4,9 @@ class @Player
 	# y: 0
 	# radius: 0
 	# speed: 0
+	# energy: 0
 	
-	constructor: (@x, @y, @radius, @speed) ->
+	constructor: (@x, @y, @radius, @speed, @energy) ->
 		
 	
 	getX: () ->
@@ -42,6 +43,12 @@ class @Player
 		distance = Math.sqrt(dx*dx + dy*dy)
 		@x += dx/distance*@speed
 		@y += dy/distance*@speed
+	
+	shoot: () ->
+		@energy = 0
+	
+	hasEnergy: () ->
+		return 0 < @energy
 	
 	draw: (context, scale) ->
 		

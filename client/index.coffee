@@ -23,7 +23,17 @@ Meteor.startup ->
 		mouseX = event.x
 		mouseY = event.y
 		isMouseButtonPressed = (event.which == 1)
+	mouseDownHandler = (event) ->
+		mouseX = event.x
+		mouseY = event.y
+		isMouseButtonPressed = (event.which == 1)
+	mouseUpHandler = (event) ->
+		mouseX = event.x
+		mouseY = event.y
+		isMouseButtonPressed = false
 	canvas.addEventListener('mousemove', mouseMoveHandler)
+	canvas.addEventListener('mousedown', mouseDownHandler)
+	canvas.addEventListener('mouseup', mouseUpHandler)
 	
 	context = canvas.getContext('2d')
 	tick = () ->

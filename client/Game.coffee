@@ -25,7 +25,7 @@ class @Game
 		@time = 0
 		@pitch = new Pitch(pitchWidth, pitchHeight)
 		@ball = new Ball(pitchWidth/2, pitchHeight/2, ballRadius)
-		@playersInTeam1 = (new Player(player.x, player.y, playerRadius, 0.5) for player in team1StartPositions)
+		@playersInTeam1 = (new Player(player.x, player.y, playerRadius, 0.5, 5) for player in team1StartPositions)
 	
 	tick: () ->
 		
@@ -33,7 +33,7 @@ class @Game
 		
 		playerHavingBall = null
 		for player in @playersInTeam1
-			if player.overlapsWith(@ball)
+			if player.hasEnergy() and player.overlapsWith(@ball)
 				playerHavingBall = player
 				break
 		
@@ -76,6 +76,13 @@ class @Game
 					newBallX = playerHavingBall.getX() + Math.cos(angle)*(@ball.getRadius()+playerHavingBall.getRadius())*0.95
 					newBallY = playerHavingBall.getY() + Math.sin(angle)*(@ball.getRadius()+playerHavingBall.getRadius())*0.95
 					@ball.setPosition(newBallX, newBallY)
+					speed = 3
+					@ball.setSpeed(Math.cos(angle)*speed, Math.sin(angle)*speed)
+					
+				else if @finger.wasPressing() and not @finger.isPressing()
+					
+					# The player is shooting!
+					playerHavingBall.shoot()
 	
 	draw: (context, width, height) ->
 		

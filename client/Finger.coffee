@@ -4,6 +4,7 @@ class @Finger
 		@x = 0
 		@y = 0
 		@_isPressing = false
+		@_wasPressing = false
 	
 	getX: () ->
 		return @x
@@ -20,5 +21,9 @@ class @Finger
 	isPressing: () ->
 		return @_isPressing
 	
+	wasPressing: () ->
+		return @_wasPressing
+	
 	setPressingStatus: (isPressing) ->
+		@_wasPressing = @_isPressing
 		@_isPressing = isPressing
