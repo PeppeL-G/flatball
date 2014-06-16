@@ -32,6 +32,11 @@ class @Ball
 	getBottom: () ->
 		return @y+@radius
 	
+	getDistanceTo: (x, y) ->
+		dx = x - @x
+		dy = y - @y
+		return Math.sqrt(dx*dx + dy*dy)
+	
 	setPosition: (x, y) ->
 		@x = x
 		@y = y

@@ -2,15 +2,24 @@ class @Pitch
 	
 	# width: 0
 	# height: 0
+	# goalWidth: 0
 	
-	constructor: (@width, @height) ->
-		
+	constructor: (@width, @height, @goalWidth) ->
 	
 	getWidth: () ->
 		return @width
 	
 	getHeight: () ->
 		return @height
+	
+	getLeftGoalpostX: () ->
+		return @width/2 - @goalWidth/2
+	
+	getRightGoalpostX: () ->
+		return @width/2 + @goalWidth/2
+	
+	isCircleWithinGoalX: (circle) ->
+		return @getLeftGoalpostX() < circle.getLeft() and circle.getRight() < @getRightGoalpostX()
 	
 	collidesWithLeftWall: (circle) ->
 		return circle.getLeft() < 0
@@ -19,10 +28,10 @@ class @Pitch
 		return @width < circle.getRight()
 	
 	collidesWithTopWall: (circle) ->
-		return circle.getTop() < 0
+		return not @isCircleWithinGoalX(circle) and circle.getTop() < 0
 	
 	collidesWithBottomWall: (circle) ->
-		return @height < circle.getBottom()
+		return not @isCircleWithinGoalX(circle) and @height < circle.getBottom()
 	
 	draw: (context, scale) ->
 		
@@ -42,8 +51,12 @@ class @Pitch
 		# (the side lines)
 		context.beginPath()
 		context.moveTo(0, lineRadius)
+		context.lineTo(@getLeftGoalpostX(), lineRadius)
+		context.moveTo(@getRightGoalpostX(), lineRadius)
 		context.lineTo(@width-lineRadius, lineRadius)
 		context.lineTo(@width-lineRadius, @height-lineRadius)
+		context.lineTo(@getRightGoalpostX(), @height-lineRadius)
+		context.moveTo(@getLeftGoalpostX(), @height-lineRadius)
 		context.lineTo(lineRadius, @height-lineRadius)
 		context.lineTo(lineRadius, lineRadius)
 		context.stroke()

@@ -11,30 +11,64 @@ class @Game
 		# Game settings.
 		pitchWidth = 100
 		pitchHeight = 150
+		goalWidth = pitchWidth/8
 		ballRadius = 1.5
 		playerRadius = 2
 		team1StartPositions = [
-			x: pitchWidth*0.5
-			y: pitchHeight*0.95
+			movementPoints: [
+				x: pitchWidth*0.25
+				y: pitchHeight*0.25
+			,
+				x: pitchWidth*0.75
+				y: pitchHeight*0.75
+			]
 		,
-			x: pitchWidth*0.25
-			y: pitchHeight*0.75
+			movementPoints: [
+				x: pitchWidth*0.75
+				y: pitchHeight*0.25
+			,
+				x: pitchWidth*0.25
+				y: pitchHeight*0.75
+			]
 		,
-			x: pitchWidth*0.75
-			y: pitchHeight*0.75
+			movementPoints: [
+				x: pitchWidth*0.75
+				y: pitchHeight*0.75
+			,
+				x: pitchWidth*0.75
+				y: pitchHeight*0.25
+			]
 		,
-			x: pitchWidth*0.25
-			y: pitchHeight*0.25
-		,
-			x: pitchWidth*0.75
-			y: pitchHeight*0.25
+			movementPoints: [
+				x: pitchWidth*0.25
+				y: pitchHeight*0.75
+			,
+				x: pitchWidth*0.25
+				y: pitchHeight*0.25
+			]
 		]
 		
 		# Initialize the game.
 		@time = 0
-		@pitch = new Pitch(pitchWidth, pitchHeight)
+		@pitch = new Pitch(pitchWidth, pitchHeight, goalWidth)
 		@ball = new Ball(pitchWidth*0.5, pitchHeight*0.9, ballRadius)
-		@playersInTeam1 = (new Player(player.x, player.y, playerRadius, 0.5, 5) for player in team1StartPositions)
+		@playersInTeam1 = (new Player(player.movementPoints[0].x, player.movementPoints[0].y, playerRadius, 0.5, 5, player.movementPoints) for player in team1StartPositions)
+	
+	getBall: () ->
+		return @ball
+	
+	getPlayerNearestBall: () ->
+		nearestDistance = Infinity
+		nearestPlayer = null
+		for player in @playersInTeam1
+			distance = @ball.getDistanceTo(player.getX(), player.getY())
+			if distance < nearestDistance
+				nearestDistance = distance
+				nearestPlayer = player
+		return nearestPlayer
+	
+	isPlayerNearestBall: (player) ->
+		return player == @getPlayerNearestBall()
 	
 	tick: () ->
 		
@@ -52,12 +86,12 @@ class @Game
 			@ball.tick()
 			for player in @playersInTeam1
 				
-				player.tick(@ball)
+				player.tick(@)
 				
 				# If the player collides with another player, move him back.
 				for otherPlayer in @playersInTeam1
 					if player != otherPlayer and player.overlapsWith(otherPlayer)
-						player.moveBack(@ball)
+						player.moveBack()
 						break
 			
 			# Handle collisions.
