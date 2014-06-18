@@ -10,7 +10,9 @@ class @Player
 	# movementPoints: [{x: 0, y:0}]
 	# currentMovepointIndex: 0
 	
-	constructor: (@x, @y, @radius, @speed, @resilience, @movementPoints) ->
+	constructor: (@radius, @speed, @resilience, @movementPoints, @color) ->
+		@x = @movementPoints[0].x
+		@y = @movementPoints[0].y
 		@energy = 0
 		@currentMovepointIndex = 0
 	
@@ -34,6 +36,9 @@ class @Player
 	
 	getBottom: () ->
 		return @y+@radius
+	
+	getColor: () ->
+		return @color
 	
 	overlapsWith: (circle) ->
 		dx = circle.getX() - @x
@@ -64,7 +69,7 @@ class @Player
 	
 	tick: (game) ->
 		
-		if game.isPlayerNearestBall(@)
+		if game.isTeamPlayerNearestBall(@)
 			
 			# Move against the ball.
 			ball = game.getBall()
@@ -102,7 +107,7 @@ class @Player
 	draw: (context, scale) ->
 		
 		# Draw it as a circle.
-		context.fillStyle = 'blue'
+		context.fillStyle = @color
 		context.beginPath()
 		context.arc(@x, @y, @radius, 0, 2*Math.PI)
 		context.fill()

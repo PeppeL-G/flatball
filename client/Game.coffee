@@ -5,6 +5,7 @@ class @Game
 	# pitch: Pitch
 	# ball: Ball
 	# playersInTeam1: [Player]
+	# playersInTeam2: [Player]
 	
 	constructor: (@finger) ->
 		
@@ -47,35 +48,71 @@ class @Game
 				y: pitchHeight*0.25
 			]
 		]
+		team2StartPositions = [
+			movementPoints: [
+				x: pitchWidth*0.50
+				y: pitchHeight*0.25
+			,
+				x: pitchWidth*0.50
+				y: pitchHeight*0.75
+			]
+		,
+			movementPoints: [
+				x: pitchWidth*0.25
+				y: pitchHeight*0.50
+			,
+				x: pitchWidth*0.75
+				y: pitchHeight*0.50
+			]
+		,
+			movementPoints: [
+				x: pitchWidth*0.10
+				y: pitchHeight*0.90
+			,
+				x: pitchWidth*0.90
+				y: pitchHeight*0.90
+			]
+		,
+			movementPoints: [
+				x: pitchWidth*0.10
+				y: pitchHeight*0.10
+			,
+				x: pitchWidth*0.90
+				y: pitchHeight*0.10
+			]
+		]
 		
 		# Initialize the game.
 		@time = 0
 		@pitch = new Pitch(pitchWidth, pitchHeight, goalWidth)
 		@ball = new Ball(pitchWidth*0.5, pitchHeight*0.9, ballRadius)
-		@playersInTeam1 = (new Player(player.movementPoints[0].x, player.movementPoints[0].y, playerRadius, 0.5, 5, player.movementPoints) for player in team1StartPositions)
+		@teams = 
+			'blue': (new Player(playerRadius, 0.5, 5, player.movementPoints, 'blue') for player in team1StartPositions)
+			'red':  (new Player(playerRadius, 0.5, 5, player.movementPoints, 'red') for player in team2StartPositions)
+		@players = @teams.blue.concat(@teams.red)
 	
 	getBall: () ->
 		return @ball
 	
-	getPlayerNearestBall: () ->
+	getTeamPlayerNearestBall: (teamColor) ->
 		nearestDistance = Infinity
 		nearestPlayer = null
-		for player in @playersInTeam1
+		for player in @teams[teamColor]
 			distance = @ball.getDistanceTo(player.getX(), player.getY())
 			if distance < nearestDistance
 				nearestDistance = distance
 				nearestPlayer = player
 		return nearestPlayer
 	
-	isPlayerNearestBall: (player) ->
-		return player == @getPlayerNearestBall()
+	isTeamPlayerNearestBall: (player) ->
+		return player == @getTeamPlayerNearestBall(player.getColor())
 	
 	tick: () ->
 		
 		@time++
 		
 		playerHavingBall = null
-		for player in @playersInTeam1
+		for player in @players
 			if player.hasEnergy() and player.overlapsWith(@ball)
 				playerHavingBall = player
 				break
@@ -84,12 +121,12 @@ class @Game
 			
 			# Make everything tick.
 			@ball.tick()
-			for player in @playersInTeam1
+			for player in @players
 				
 				player.tick(@)
 				
 				# If the player collides with another player, move him back.
-				for otherPlayer in @playersInTeam1
+				for otherPlayer in @players
 					if player != otherPlayer and player.overlapsWith(otherPlayer)
 						player.moveBack()
 						break
@@ -162,5 +199,5 @@ class @Game
 		
 		@pitch.draw(context, scale)
 		@ball.draw(context, scale)
-		for player in @playersInTeam1
+		for player in @players
 			player.draw(context, scale)
