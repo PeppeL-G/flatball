@@ -3,14 +3,27 @@ class @Pitch
 	# width: 0
 	# height: 0
 	# goalWidth: 0
+	# lineRadius: 0
 	
-	constructor: (@width, @height, @goalWidth) ->
+	constructor: (@width, @height, @lineRadius, @goalWidth) ->
 	
 	getWidth: () ->
 		return @width
 	
 	getHeight: () ->
 		return @height
+	
+	getLeftLineRight: () ->
+		return @lineRadius*2
+	
+	getRightLineLeft: () ->
+		return @width - @lineRadius*2
+	
+	getTopLineBottom: () ->
+		return @lineRadius*2
+	
+	getBottomLineTop: () ->
+		return @height - @lineRadius*2
 	
 	getLeftGoalpostX: () ->
 		return @width/2 - @goalWidth/2
@@ -21,17 +34,17 @@ class @Pitch
 	isCircleWithinGoalX: (circle) ->
 		return @getLeftGoalpostX() < circle.getLeft() and circle.getRight() < @getRightGoalpostX()
 	
-	collidesWithLeftWall: (circle) ->
-		return circle.getLeft() < 0
+	collidesWithLeftLine: (circle) ->
+		return circle.getLeft() < @getLeftLineRight()
 	
-	collidesWithRightWall: (circle) ->
-		return @width < circle.getRight()
+	collidesWithRightLine: (circle) ->
+		return @getRightLineLeft() < circle.getRight()
 	
-	collidesWithTopWall: (circle) ->
-		return not @isCircleWithinGoalX(circle) and circle.getTop() < 0
+	collidesWithTopLine: (circle) ->
+		return not @isCircleWithinGoalX(circle) and circle.getTop() < @getTopLineBottom()
 	
-	collidesWithBottomWall: (circle) ->
-		return not @isCircleWithinGoalX(circle) and @height < circle.getBottom()
+	collidesWithBottomLine: (circle) ->
+		return not @isCircleWithinGoalX(circle) and @getBottomLineTop() < circle.getBottom()
 	
 	draw: (context, scale) ->
 		
@@ -44,7 +57,7 @@ class @Pitch
 		context.fillRect(x0, y0, width, height)
 		
 		# Draw the lines.
-		lineRadius = 0.1*scale
+		lineRadius = @lineRadius
 		context.lineWidth = lineRadius*2
 		context.strokeStyle = 'white'
 		
@@ -63,7 +76,7 @@ class @Pitch
 		
 		# (middle line)
 		context.beginPath()
-		context.moveTo(0,            @height/2)
+		context.moveTo(0     , @height/2)
 		context.lineTo(@width, @height/2)
 		context.stroke()
 		

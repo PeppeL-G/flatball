@@ -12,6 +12,7 @@ class @Game
 		# Game settings.
 		pitchWidth = 100
 		pitchHeight = 150
+		lineRadius = 1
 		goalWidth = pitchWidth/8
 		ballRadius = 1.5
 		playerRadius = 2
@@ -84,7 +85,7 @@ class @Game
 		
 		# Initialize the game.
 		@time = 0
-		@pitch = new Pitch(pitchWidth, pitchHeight, goalWidth)
+		@pitch = new Pitch(pitchWidth, pitchHeight, lineRadius, goalWidth)
 		@ball = new Ball(pitchWidth*0.5, pitchHeight*0.9, ballRadius)
 		@teams = 
 			'blue': (new Player(playerRadius, 0.5, 5, player.movementPoints, 'blue') for player in team1StartPositions)
@@ -132,14 +133,14 @@ class @Game
 						break
 			
 			# Handle collisions.
-			if @pitch.collidesWithLeftWall(@ball)
+			if @pitch.collidesWithLeftLine(@ball)
 				@ball.flipXSpeedDirection()
-			else if @pitch.collidesWithRightWall(@ball)
+			else if @pitch.collidesWithRightLine(@ball)
 				@ball.flipXSpeedDirection()
 			
-			if @pitch.collidesWithTopWall(@ball)
+			if @pitch.collidesWithTopLine(@ball)
 				@ball.flipYSpeedDirection()
-			else if @pitch.collidesWithBottomWall(@ball)
+			else if @pitch.collidesWithBottomLine(@ball)
 				@ball.flipYSpeedDirection()
 		
 		else
