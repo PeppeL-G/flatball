@@ -4,8 +4,16 @@ class @Pitch
 	# height: 0
 	# goalWidth: 0
 	# lineRadius: 0
+	# topLeftGoalpost: Goalpost
+	# topRightGoalpost: Goalpost
+	# bottomLeftGoalpost: Goalpost
+	# bottomRightGoalpost: Goalpost
 	
 	constructor: (@width, @height, @lineRadius, @goalWidth) ->
+		@topLeftGoalpost = new Goalpost((@width-@goalWidth)/2, @lineRadius, @lineRadius)
+		@topRightGoalpost = new Goalpost((@width+@goalWidth)/2, @lineRadius, @lineRadius)
+		@bottomLeftGoalpost = new Goalpost((@width-@goalWidth)/2, @height-@lineRadius, @lineRadius)
+		@bottomRightGoalpost = new Goalpost((@width+@goalWidth)/2, @height-@lineRadius, @lineRadius)
 	
 	getWidth: () ->
 		return @width
@@ -87,3 +95,9 @@ class @Pitch
 		context.beginPath()
 		context.arc(x, y, radius, 0, 2*Math.PI)
 		context.stroke()
+		
+		# The goalposts.
+		@topLeftGoalpost.draw(context, scale)
+		@topRightGoalpost.draw(context, scale)
+		@bottomLeftGoalpost.draw(context, scale)
+		@bottomRightGoalpost.draw(context, scale)
