@@ -33,6 +33,18 @@ class @Circle
 		dy = circle.getY() - @y
 		return Math.sqrt(dx*dx + dy*dy) < circle.getRadius() + @radius
 	
+	setLeft: (left) ->
+		@x = left+@radius
+	
+	setRight: (right) ->
+		@x = right-@radius
+	
+	setTop: (top) ->
+		@y = top+@radius
+	
+	setBottom: (bottom) ->
+		@y = bottom-@radius
+	
 	setPosition: (x, y) ->
 		@x = x
 		@y = y

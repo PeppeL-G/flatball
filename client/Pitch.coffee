@@ -4,16 +4,18 @@ class @Pitch
 	# height: 0
 	# goalWidth: 0
 	# lineRadius: 0
+	# middlePost: Goalpost
 	# topLeftGoalpost: Goalpost
 	# topRightGoalpost: Goalpost
 	# bottomLeftGoalpost: Goalpost
 	# bottomRightGoalpost: Goalpost
 	
 	constructor: (@width, @height, @lineRadius, @goalWidth) ->
-		@topLeftGoalpost = new Goalpost((@width-@goalWidth)/2, @lineRadius, @lineRadius)
-		@topRightGoalpost = new Goalpost((@width+@goalWidth)/2, @lineRadius, @lineRadius)
-		@bottomLeftGoalpost = new Goalpost((@width-@goalWidth)/2, @height-@lineRadius, @lineRadius)
-		@bottomRightGoalpost = new Goalpost((@width+@goalWidth)/2, @height-@lineRadius, @lineRadius)
+		@middlePost = new Post(@width/2,  @height/2, @width/6)
+		@topLeftGoalpost = new Post((@width-@goalWidth)/2, @lineRadius, @lineRadius)
+		@topRightGoalpost = new Post((@width+@goalWidth)/2, @lineRadius, @lineRadius)
+		@bottomLeftGoalpost = new Post((@width-@goalWidth)/2, @height-@lineRadius, @lineRadius)
+		@bottomRightGoalpost = new Post((@width+@goalWidth)/2, @height-@lineRadius, @lineRadius)
 	
 	getWidth: () ->
 		return @width
@@ -54,6 +56,19 @@ class @Pitch
 	collidesWithBottomLine: (circle) ->
 		return not @isCircleWithinGoalX(circle) and @getBottomLineTop() < circle.getBottom()
 	
+	getCollidedGoalpost: (circle) ->
+		if circle.overlapsWith(@middlePost)
+			return @middlePost
+		if circle.overlapsWith(@topLeftGoalpost) and @topLeftGoalpost.getX() < circle.getX()
+			return @topLeftGoalpost
+		if circle.overlapsWith(@topRightGoalpost) and circle.getX() < @topRightGoalpost.getX()
+			return @topRightGoalpost
+		if circle.overlapsWith(@bottomLeftGoalpost) and @bottomLeftGoalpost.getX() < circle.getX()
+			return @bottomLeftGoalpost
+		if circle.overlapsWith(@bottomRightGoalpost) and circle.getX() < @bottomRightGoalpost.getX()
+			return @bottomRightGoalpost
+		return null
+	
 	draw: (context, scale) ->
 		
 		# Draw the grass.
@@ -82,21 +97,8 @@ class @Pitch
 		context.lineTo(lineRadius, lineRadius)
 		context.stroke()
 		
-		# (middle line)
-		context.beginPath()
-		context.moveTo(0     , @height/2)
-		context.lineTo(@width, @height/2)
-		context.stroke()
-		
-		# (circle in middle)
-		x = @width/2
-		y = @height/2
-		radius = @width/7
-		context.beginPath()
-		context.arc(x, y, radius, 0, 2*Math.PI)
-		context.stroke()
-		
 		# The goalposts.
+		@middlePost.draw(context, scale)
 		@topLeftGoalpost.draw(context, scale)
 		@topRightGoalpost.draw(context, scale)
 		@bottomLeftGoalpost.draw(context, scale)

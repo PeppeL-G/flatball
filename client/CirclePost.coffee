@@ -1,4 +1,4 @@
-class @Goalpost extends Circle
+class @Post extends Circle
 	
 	draw: (context, scale) ->
 		

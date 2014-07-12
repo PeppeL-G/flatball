@@ -95,6 +95,9 @@ class @Game
 	getBall: () ->
 		return @ball
 	
+	getPitch: () ->
+		return @pitch
+	
 	getTeamPlayerNearestBall: (teamColor) ->
 		nearestDistance = Infinity
 		nearestPlayer = null
@@ -121,7 +124,7 @@ class @Game
 		if playerHavingBall == null
 			
 			# Make everything tick.
-			@ball.tick()
+			@ball.tick(@)
 			for player in @players
 				
 				player.tick(@)
@@ -131,17 +134,6 @@ class @Game
 					if player != otherPlayer and player.overlapsWith(otherPlayer)
 						player.moveBack()
 						break
-			
-			# Handle collisions.
-			if @pitch.collidesWithLeftLine(@ball)
-				@ball.flipXSpeedDirection()
-			else if @pitch.collidesWithRightLine(@ball)
-				@ball.flipXSpeedDirection()
-			
-			if @pitch.collidesWithTopLine(@ball)
-				@ball.flipYSpeedDirection()
-			else if @pitch.collidesWithBottomLine(@ball)
-				@ball.flipYSpeedDirection()
 		
 		else
 			
